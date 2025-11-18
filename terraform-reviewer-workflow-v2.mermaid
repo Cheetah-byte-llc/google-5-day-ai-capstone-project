@@ -34,7 +34,7 @@ graph TB
         S2B3 --> QualityCheck
         
         QualityCheck -->|No, iterate<br/>max 3 times| S2B1
-        QualityCheck -->|Yes| PolishedDocs[Polished Documentation]
+        QualityCheck -->|Yes| PolishedDocs[Polished Documentation<br/>High quality verified]
     end
     
     PolishedDocs --> Stage3[STAGE 3: GUIDANCE - HOW]
@@ -42,12 +42,12 @@ graph TB
     
     subgraph Stage3[" "]
         direction TB
-        S3A[Usage/Examples Agent<br/>HOW<br/>MCP: create_workspace,<br/>terraform_validate]
+        S3A[Usage/Examples Agent<br/>HOW<br/>MCP: create_workspace,<br/>terraform_init/validate/plan]
         S3B[Best Practices Critic Agent<br/>HOW<br/>MCP: run_tflint,<br/>run_terrascan, run_checkov]
         
         S3A -.parallel.-> S3B
         
-        S3A --> UsageOut[Usage Examples &<br/>Configuration Patterns<br/>Self-validated]
+        S3A --> UsageOut[Usage Examples &<br/>Configuration Patterns<br/>Self-validated via MCP]
         S3B --> CriticOut[Critique Report &<br/>Recommendations<br/>Tool-backed findings]
     end
     
@@ -68,50 +68,36 @@ graph TB
     
     subgraph Stage5[" "]
         direction TB
-        S5[Evaluation Agent + MCP Server<br/>Autonomous validation]
+        S5[Evaluation Agent + MCP Server<br/>Autonomous validation & reporting]
         
         S5 --> EvalProcess[Evaluation Process]
         
-        EvalProcess --> E1[1. Example Validation<br/>• Create workspaces<br/>• terraform init/validate/plan<br/>• Analyze results]
+        EvalProcess --> E1[1. Example Validation<br/>• Create test workspaces<br/>• terraform init/validate/plan<br/>• Record pass/fail + errors]
         
-        EvalProcess --> E2[2. Documentation Accuracy<br/>• Parse actual code<br/>• Compare with docs<br/>• Find discrepancies]
+        EvalProcess --> E2[2. Documentation Accuracy<br/>• Parse actual code via MCP<br/>• Compare with docs<br/>• Identify discrepancies]
         
-        EvalProcess --> E3[3. Critique Validation<br/>• Run tflint/terrascan/checkov<br/>• Verify findings<br/>• Check coverage]
+        EvalProcess --> E3[3. Critique Validation<br/>• Run tflint/terrascan/checkov<br/>• Verify critique findings<br/>• Identify gaps]
         
         EvalProcess --> E4[4. Quality Assessment<br/>• Formatting checks<br/>• Security scans<br/>• Compliance verification]
         
-        E1 --> EvalResults[Evaluation Results]
-        E2 --> EvalResults
-        E3 --> EvalResults
-        E4 --> EvalResults
+        E1 --> EvalReport[Evaluation Report:<br/>• Validation metrics<br/>• Accuracy scores<br/>• Quality ratings<br/>• Prioritized recommendations]
+        E2 --> EvalReport
+        E3 --> EvalReport
+        E4 --> EvalReport
     end
     
-    EvalResults --> SelfCorrect{Self-Correction<br/>Needed?}
+    EvalReport --> Stage6[STAGE 6: INTERACTIVE SESSION]
     
-    SelfCorrect -->|Example pass < 90%| CorrectUsage[Trigger Usage Agent<br/>Regenerate failed examples]
-    SelfCorrect -->|Doc accuracy < 95%| CorrectDocs[Trigger Stage 2b<br/>Refine documentation]
-    SelfCorrect -->|Critique accuracy < 90%| CorrectCritic[Trigger Critic Agent<br/>Re-analyze findings]
-    
-    CorrectUsage --> IterCheck{Iterations<br/>< 2?}
-    CorrectDocs --> IterCheck
-    CorrectCritic --> IterCheck
-    
-    IterCheck -->|Yes| Stage3
-    IterCheck -->|No| FinalReport[Final Report<br/>with warnings]
-    
-    SelfCorrect -->|All metrics pass| FinalReport[Final Evaluation Report:<br/>• Validation results<br/>• Accuracy metrics<br/>• Quality scores<br/>• Confidence ratings]
-    
-    FinalReport --> Interactive[STAGE 6: INTERACTIVE SESSION]
-    
-    subgraph Interactive[" "]
+    subgraph Stage6[" "]
         direction TB
-        I1[User Q&A Interface]
-        I1 --> I2[Orchestrator maintains<br/>full context]
-        I2 -.follow-up queries.-> I2
-        I2 --> I3[Context-aware responses<br/>Drill-down capabilities]
+        I1[User Reviews Report<br/>& Recommendations]
+        I1 --> I2[Q&A Interface]
+        I2 --> I3[Orchestrator maintains<br/>full context]
+        I3 -.follow-up queries.-> I3
+        I3 --> I4[User can request:<br/>• Drill-down on findings<br/>• Regenerate specific components<br/>• Additional examples<br/>• Detailed explanations]
     end
     
-    Interactive --> End([Complete])
+    Stage6 --> End([Complete])
     
     classDef whatAgent fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
     classDef whyAgent fill:#fff3e0,stroke:#f57c00,stroke-width:2px
@@ -121,14 +107,12 @@ graph TB
     classDef context fill:#fff9c4,stroke:#f9a825,stroke-width:2px
     classDef stage fill:#fafafa,stroke:#616161,stroke-width:3px
     classDef evaluation fill:#e1f5fe,stroke:#0277bd,stroke-width:3px
-    classDef correction fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
     
     class S1A,S1B,S2B1,S2B2 whatAgent
     class S2B3 whyAgent
     class S3A,S3B howAgent
     class S2A overlapAgent
-    class S4,S5,I1,I2,I3 metaAgent
-    class Context1,InitDocs,PolishedDocs,UsageOut,CriticOut,CompletePackage,FinalReport context
-    class Stage1,Stage2a,Stage2b,Stage3,Stage4,Interactive stage
-    class Stage5,EvalProcess,E1,E2,E3,E4,EvalResults evaluation
-    class CorrectUsage,CorrectDocs,CorrectCritic,IterCheck correction
+    class S4,S5,I1,I2,I3,I4 metaAgent
+    class Context1,InitDocs,PolishedDocs,UsageOut,CriticOut,CompletePackage,EvalReport context
+    class Stage1,Stage2a,Stage2b,Stage3,Stage4,Stage6 stage
+    class Stage5,EvalProcess,E1,E2,E3,E4 evaluation

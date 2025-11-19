@@ -1,0 +1,50 @@
+graph TB
+    Start([Terraform Repository]) --> MVP[MVP PIPELINE - 3 AGENTS]
+    
+    subgraph MVP[" "]
+        direction TB
+        
+        Stage1[STAGE 1: ANALYSIS]
+        Stage1Desc[Repository Analyzer Agent<br/>✅ MVP - Implemented]
+        
+        Stage2[STAGE 2: DOCUMENTATION]
+        Stage2Desc[Documentation Generator Agent<br/>✅ MVP - Implemented]
+        
+        Stage3[STAGE 3: EVALUATION]
+        Stage3Desc[Evaluation Agent<br/>✅ MVP - Implemented]
+        
+        Stage1 --> Stage1Desc
+        Stage1Desc --> Context1[Repository Context:<br/>• Modules inventory<br/>• Variables & outputs<br/>• Resource catalog<br/>• File structure]
+        
+        Context1 --> Stage2
+        Stage2 --> Stage2Desc
+        Stage2Desc --> Docs[Generated Documentation:<br/>• Module READMEs<br/>• Variable tables<br/>• Output descriptions<br/>• Usage instructions]
+        
+        Docs --> Stage3
+        Context1 --> Stage3
+        Stage3 --> Stage3Desc
+        Stage3Desc --> Report[Evaluation Report:<br/>• Documentation accuracy<br/>• Validation results<br/>• Quality metrics<br/>• Recommendations]
+    end
+    
+    Report --> Output([Final Output:<br/>Documentation + Report])
+    
+    MCP[Terraform MCP Server<br/>Real Terraform Operations]
+    MCP -.provides.-> Stage1Desc
+    MCP -.validates.-> Stage3Desc
+    
+    Gemini[Google Gemini 2.0 Flash<br/>Agent Intelligence]
+    Gemini -.powers.-> Stage1Desc
+    Gemini -.powers.-> Stage2Desc
+    Gemini -.powers.-> Stage3Desc
+    
+    classDef mvpAgent fill:#4CAF50,stroke:#2E7D32,stroke-width:3px,color:#fff
+    classDef context fill:#FFF9C4,stroke:#F9A825,stroke-width:2px
+    classDef infrastructure fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    classDef output fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    classDef stage fill:#F5F5F5,stroke:#616161,stroke-width:2px
+    
+    class Stage1Desc,Stage2Desc,Stage3Desc mvpAgent
+    class Context1,Docs,Report context
+    class MCP,Gemini infrastructure
+    class Output output
+    class Stage1,Stage2,Stage3 stage

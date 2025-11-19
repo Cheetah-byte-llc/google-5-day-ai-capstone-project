@@ -1,0 +1,33 @@
+graph LR
+    Input([Terraform<br/>Repository]) --> Agent1
+    
+    Agent1["<b>1. Repository Analyzer</b><br/>✅ MVP Agent<br/><br/>Scans Terraform code<br/>Extracts modules, variables<br/>Uses MCP for parsing"]
+    
+    Agent1 --> Data1[Context:<br/>Module Inventory]
+    
+    Data1 --> Agent2["<b>2. Documentation Generator</b><br/>✅ MVP Agent<br/><br/>Creates README files<br/>Generates variable tables<br/>Powered by Gemini"]
+    
+    Agent2 --> Data2[Generated:<br/>Documentation]
+    
+    Data2 --> Agent3["<b>3. Evaluation Agent</b><br/>✅ MVP Agent<br/><br/>Validates accuracy<br/>Tests via MCP<br/>Calculates metrics"]
+    
+    Data1 --> Agent3
+    
+    Agent3 --> Output([Final Output:<br/>Docs + Report])
+    
+    MCP[Terraform MCP Server] -.Real Operations.-> Agent1
+    MCP -.Validation.-> Agent3
+    
+    Gemini[Gemini 2.0 Flash] -.Intelligence.-> Agent1
+    Gemini -.Intelligence.-> Agent2
+    Gemini -.Intelligence.-> Agent3
+    
+    style Agent1 fill:#4CAF50,stroke:#2E7D32,stroke-width:3px,color:#fff
+    style Agent2 fill:#4CAF50,stroke:#2E7D32,stroke-width:3px,color:#fff
+    style Agent3 fill:#4CAF50,stroke:#2E7D32,stroke-width:3px,color:#fff
+    style Data1 fill:#FFF9C4,stroke:#F9A825,stroke-width:2px
+    style Data2 fill:#FFF9C4,stroke:#F9A825,stroke-width:2px
+    style MCP fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style Gemini fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style Input fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style Output fill:#E8F5E9,stroke:#388E3C,stroke-width:2px

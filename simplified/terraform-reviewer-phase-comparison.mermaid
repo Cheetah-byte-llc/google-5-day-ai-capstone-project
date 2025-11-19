@@ -1,0 +1,106 @@
+graph TB
+    subgraph Phase1[" "]
+        direction TB
+        P1Title["<b>PHASE 1: MVP (12 Days)</b><br/>3 Core Agents - December 1st Deliverable"]
+        
+        P1Start([Terraform Repo])
+        
+        P1S1[Repository Analyzer<br/>✅ Implemented]
+        P1S1 --> P1C1[Repository Context]
+        
+        P1C1 --> P1S2[Documentation Generator<br/>✅ Implemented]
+        P1S2 --> P1C2[Generated Docs]
+        
+        P1C2 --> P1S3[Evaluation Agent<br/>✅ Implemented]
+        P1C1 --> P1S3
+        P1S3 --> P1Output[Report + Documentation]
+        
+        P1Start --> P1S1
+        
+        P1MCP[MCP Integration<br/>✅ Working]
+        P1Gemini[Gemini 2.0 Flash<br/>✅ Working]
+        
+        P1MCP -.provides data.-> P1S1
+        P1MCP -.validates.-> P1S3
+        P1Gemini -.powers.-> P1S1
+        P1Gemini -.powers.-> P1S2
+        P1Gemini -.powers.-> P1S3
+    end
+    
+    subgraph Phase2[" "]
+        direction TB
+        P2Title["<b>PHASE 2: Full System (4-5 Weeks)</b><br/>10 Agents - Complete Architecture"]
+        
+        P2Start([Terraform Repo])
+        
+        P2Stage1[STAGE 1: DISCOVERY]
+        P2S1A[Repository Analyzer<br/>✅ From Phase 1]
+        P2S1B[Cross-Reference Linker<br/>⏳ New]
+        P2S1A -.parallel.-> P2S1B
+        
+        P2Stage1 --> P2S1A
+        P2Stage1 --> P2S1B
+        P2S1A --> P2C1[Shared Context]
+        P2S1B --> P2C1
+        
+        P2C1 --> P2Stage2[STAGE 2: DOCUMENTATION]
+        
+        P2S2A[Doc Generator<br/>✅ From Phase 1]
+        P2Stage2 --> P2S2A
+        P2S2A --> P2Stage2B[STAGE 2B: REFINEMENT]
+        
+        P2S2B1[Technical Accuracy<br/>⏳ New]
+        P2S2B2[Completeness<br/>⏳ New]
+        P2S2B3[Clarity Enhancer<br/>⏳ New]
+        
+        P2Stage2B --> P2S2B1
+        P2Stage2B --> P2S2B2
+        P2Stage2B --> P2S2B3
+        P2S2B1 -.parallel.-> P2S2B2
+        P2S2B2 -.parallel.-> P2S2B3
+        
+        P2S2B1 --> P2C2[Polished Docs]
+        P2S2B2 --> P2C2
+        P2S2B3 --> P2C2
+        
+        P2C2 --> P2Stage3[STAGE 3: GUIDANCE]
+        
+        P2S3A[Usage/Examples<br/>⏳ New]
+        P2S3B[Best Practices Critic<br/>⏳ New]
+        P2Stage3 --> P2S3A
+        P2Stage3 --> P2S3B
+        P2S3A -.parallel.-> P2S3B
+        
+        P2S3A --> P2C3[Examples + Critique]
+        P2S3B --> P2C3
+        
+        P2C3 --> P2Stage4[STAGE 4: AGGREGATION]
+        P2Stage4 --> P2S4[Orchestrator<br/>⏳ New]
+        P2S4 --> P2C4[Complete Package]
+        
+        P2C4 --> P2Stage5[STAGE 5: EVALUATION]
+        P2Stage5 --> P2S5[Evaluation Agent<br/>✅ From Phase 1<br/>Enhanced]
+        P2S5 --> P2C5[Evaluation Report]
+        
+        P2C5 --> P2Stage6[STAGE 6: INTERACTIVE]
+        P2Stage6 --> P2S6[Q&A Session<br/>⏳ New]
+        P2S6 --> P2Output[Complete System Output]
+        
+        P2Start --> P2Stage1
+    end
+    
+    Phase1 -.Phase 2 adds 7 agents<br/>+ refinement loops<br/>+ parallel execution.-> Phase2
+    
+    classDef mvpAgent fill:#4CAF50,stroke:#2E7D32,stroke-width:2px,color:#fff
+    classDef phase2Agent fill:#90CAF9,stroke:#1976D2,stroke-width:2px
+    classDef context fill:#FFF9C4,stroke:#F9A825,stroke-width:2px
+    classDef infrastructure fill:#E3F2FD,stroke:#0D47A1,stroke-width:2px
+    classDef title fill:#F5F5F5,stroke:#616161,stroke-width:3px,color:#000
+    classDef stage fill:#EEEEEE,stroke:#757575,stroke-width:2px
+    
+    class P1S1,P1S2,P1S3,P2S1A,P2S2A,P2S5 mvpAgent
+    class P2S1B,P2S2B1,P2S2B2,P2S2B3,P2S3A,P2S3B,P2S4,P2S6 phase2Agent
+    class P1C1,P1C2,P2C1,P2C2,P2C3,P2C4,P2C5 context
+    class P1MCP,P1Gemini infrastructure
+    class P1Title,P2Title title
+    class P2Stage1,P2Stage2,P2Stage2B,P2Stage3,P2Stage4,P2Stage5,P2Stage6 stage
